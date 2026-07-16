@@ -87,6 +87,13 @@ body.view-chapter #chapnav{display:flex}
 .photobox figure{margin:0 0 14px}
 .photobox img{display:block;width:100%;max-width:540px;margin:10px auto 4px;border:1px solid var(--line);border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.12)}
 .photobox figcaption{text-align:center;font-size:12.5px;color:var(--muted)}
+/* home overall progress */
+.overallwrap{margin-top:16px;background:#f2f6f0;border:1px solid #cfe0d5;border-radius:12px;padding:12px 15px}
+.overallhd{font-size:13px;font-weight:700;color:var(--red-dark);margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}
+.overallwrap .pbar{height:12px}
+.overallwrap .ptext{margin-top:6px;text-align:right}
+.btnsolid{background:var(--red);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:14px;font-weight:700;cursor:pointer}
+.btnsolid:hover{background:var(--red-dark)}
 .hero{background:linear-gradient(120deg,#fff,#fbfbfc);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
 .hero h2{margin:0 0 8px;color:var(--red);font-size:21px}
 .hero p{margin:6px 0;font-size:14px;color:#3d4351}
@@ -227,6 +234,11 @@ body.fs-xl main{zoom:1.34}
     <span>臺大麻醉部教育簡報（70 頁）</span>
   </div>
   <div class="caution" style="margin-top:14px"><b>重要：</b>本指南僅供教育訓練與快速參考。實際臨床操作務必以原廠使用說明書（IFU）、操作手冊與院內規範為準。美國聯邦法律規定本裝置僅限醫師銷售或依醫師指示銷售。</div>
+  <div class="overallwrap">
+    <div class="overallhd"><span>整體完成進度（所有章節步驟）</span></div>
+    <div class="pbar"><div id="overallBar"></div></div>
+    <div class="ptext" id="overallText">0 / 0（0%）</div>
+  </div>
 </div>
 <div id="homeNav" class="homeNav"></div>
 </div>
@@ -426,9 +438,39 @@ body.fs-xl main{zoom:1.34}
   <p>點選臨床工具可使用：<b>切換模式、輸液反應測試、進階計算機、病患資料、歸零/波型、輸入 CVP</b> 等功能。</p>
 </section>
 
+<!-- 壓力波形品質 -->
+<section class="sec" id="s-waveform">
+  <h2>⑩ 壓力波形品質與方波測試 <span class="pgtag">臨床實務補充</span></h2>
+  <p class="lede">動脈壓波形的阻尼（damping）狀態會直接影響 FloTrac／Acumen 的 CO/SV 準確性。數值可疑時，先做方波測試。</p>
+
+  <h3>方波測試（Fast-flush / Square wave test）</h3>
+  <ol class="steps">
+    <li><input type="checkbox"><div class="stepbody"><span class="zh">快速拉動沖洗閥（fast-flush）約 1 秒後放開，觀察波形上出現的<b>方波</b>與放開後的<b>振盪</b>。</span></div></li>
+    <li><input type="checkbox"><div class="stepbody"><span class="zh">最佳阻尼：放開後出現 <b>1–2 次</b>快速振盪即回到正常動脈波形。</span></div></li>
+  </ol>
+
+  <h3>三種阻尼判讀</h3>
+  <table>
+    <tr><th>狀態</th><th>方波表現</th><th>對數值影響</th><th>處理</th></tr>
+    <tr><td>最佳阻尼 Optimal</td><td>放開後 1–2 次振盪</td><td>準確</td><td>正常。</td></tr>
+    <tr><td>過阻尼 Over-damped</td><td>無振盪、緩慢回歸</td><td>收縮壓偏低、舒張壓偏高；SV/CO 可能低估</td><td>檢查氣泡、血栓、管路打折、三向閥、接頭鬆脫；沖洗排氣。</td></tr>
+    <tr><td>欠阻尼 Under-damped</td><td>多次過衝振盪</td><td>收縮壓偏高、舒張壓偏低</td><td>移除多餘延長管／三向閥、排氣；必要時加阻尼器。</td></tr>
+  </table>
+
+  <h3>常見造成數值不準的原因</h3>
+  <ul>
+    <li>感測器<b>未與靜脈壓參考軸同高</b>（過高→偏低；過低→偏高）。</li>
+    <li>管路內<b>氣泡、血栓、打折</b>或接頭鬆脫、蓋帽非無通氣孔。</li>
+    <li>加壓袋<b>未達 300 mmHg</b>、未定期沖洗。</li>
+    <li><b>未歸零</b>或需重新歸零；病人姿勢／床高改變後未重新對位。</li>
+    <li>嚴重心律不整、主動脈氣球幫浦（IABP）等會影響動脈波形分析。</li>
+  </ul>
+  <div class="tip"><b>口訣：</b>數值可疑 → 先看波形 → 方波測試 → 對高度 → 排氣／歸零。</div>
+</section>
+
 <!-- Acumen IQ 進階參數 -->
 <section class="sec" id="s-acumen-params">
-  <h2>⑩ Acumen IQ 進階參數：HPI／dP·dt／Eadyn <span class="pgtag">臺大麻醉部教育簡報</span></h2>
+  <h2>⑪ Acumen IQ 進階參數：HPI／dP·dt／Eadyn <span class="pgtag">臺大麻醉部教育簡報</span></h2>
   <p class="lede">Acumen IQ 感測器除了心輸出量，還提供三項進階參數，協助辨識與追查血行動力不穩定的根本原因（前負荷／後負荷／收縮力）。<span class="badge aiq">Acumen IQ 模式</span></p>
 
   <h3>HPI 低血壓預測指數（Hypotension Prediction Index）</h3>
@@ -437,7 +479,10 @@ body.fs-xl main{zoom:1.34}
     <li>全球第一個獲 <b>FDA 與 CE</b> 核准的 AI 人工智慧預測性治療參數。</li>
     <li>以動脈壓波形為基礎，透過機器學習（開發資料集含超過 <b>1 億個心動週期、20 萬個低/非低血壓事件</b>）建立，內含 <b>23 個預測特徵</b>。</li>
     <li>輸出 <b>0–100</b> 的數值：數值越高代表病人正趨向低血壓事件的可能性越高，可提早介入。</li>
+    <li>數值<b>每 20 秒更新</b>；當 <b>HPI &gt; 85</b> 會發出警報，若連續兩次 &gt;85 或任一時間達 100，會跳出高警示視窗，提示以次要畫面檢視血行動力。</li>
+    <li>可在低血壓事件發生前<b>最多約 15 分鐘</b>提示；於原始驗證研究，事件前 10 分鐘達<b>靈敏度 90%、專一性 89%、AUC 0.95</b>。</li>
   </ul>
+  <p style="font-size:12px;color:var(--muted)">出處：Hatib F, et al. Machine-learning algorithm to predict hypotension. <i>Anesthesiology</i> 2018;129:663–674；Edwards Acumen HPI 參數卡（PP--US-2312 v2.0）。「1 億波形／20 萬事件」為原廠開發資料集之描述（詳見「參考資料與出處」章）。</p>
 
   <h3>dP/dt（收縮期斜率，Systolic slope）</h3>
   <p>週邊動脈壓波形的<b>最大上升斜率</b>，是左心室整體收縮力（contractility）的良好指標，提供收縮力趨勢變化，協助評估<b>升壓／強心劑量控制</b>。</p>
@@ -465,7 +510,7 @@ body.fs-xl main{zoom:1.34}
 
 <!-- 臨床背景與低血壓處置 -->
 <section class="sec" id="s-clinical-bg">
-  <h2>⑪ 臨床背景與低血壓處置 <span class="pgtag">臺大麻醉部教育簡報</span></h2>
+  <h2>⑫ 臨床背景與低血壓處置 <span class="pgtag">臺大麻醉部教育簡報</span></h2>
   <p class="lede">為什麼需要進階血行動力監測，以及低血壓的成因與處置決策原則。</p>
 
   <h3>術後併發症與低血壓的衝擊</h3>
@@ -500,7 +545,7 @@ body.fs-xl main{zoom:1.34}
 
 <!-- ⑩ ForeSight -->
 <section class="sec" id="s-foresight">
-  <h2>⑫ ForeSight 組織血氧監測系統 <span class="pgtag">Setup Guide 第 7–10 頁・簡報</span></h2>
+  <h2>⑬ ForeSight 組織血氧監測系統 <span class="pgtag">Setup Guide 第 7–10 頁・簡報</span></h2>
   <p class="lede">ForeSight 組織血氧監測系統（ForeSight Tissue Oximetry System / ForeSight Elite）用於監測組織氧飽和度（StO₂）。</p>
 
   <h3>HemoSphere 監視器端設定</h3>
@@ -561,7 +606,7 @@ body.fs-xl main{zoom:1.34}
 
 <!-- ForeSight 深入 -->
 <section class="sec" id="s-foresight-adv">
-  <h2>⑬ ForeSight 深入：原理・貼片・目標值・故障排除 <span class="pgtag">臺大麻醉部教育簡報</span></h2>
+  <h2>⑭ ForeSight 深入：原理・貼片・目標值・故障排除 <span class="pgtag">臺大麻醉部教育簡報</span></h2>
   <p class="lede">補充 ForeSight 組織血氧（StO₂）的量測原理、貼片選擇、建議目標值與常見問題排除。</p>
 
   <h3>量測原理（NIRS 近紅外光譜）</h3>
@@ -585,6 +630,19 @@ body.fs-xl main{zoom:1.34}
   <h3>建議 StO₂ 目標值與警報</h3>
   <div class="tip"><b>建議目標值：</b>90 – 85 – 60 – 50（原廠建議，實際由臨床醫師決定；此組數值會觸發警報）。設定路徑：點參數方塊 → <b>Set Targets</b>。</div>
 
+  <h3>StO₂ 下降時的臨床處置</h3>
+  <p>StO₂ 明顯下降（例如較基準值下降約 <b>>20%</b>，或絕對值持續偏低）時，依「氧供／氧需」思路逐項排查：</p>
+  <table>
+    <tr><th>面向</th><th>檢查／處置</th></tr>
+    <tr><td>氧供（Delivery）</td><td>MAP／CO 是否足夠、Hb 是否過低、SpO₂／FiO₂；必要時補液、升壓／強心、輸血。</td></tr>
+    <tr><td>頭頸姿勢</td><td>頭部位置／旋轉、頸靜脈回流是否受阻、氣管內管固定帶是否壓迫。</td></tr>
+    <tr><td>二氧化碳</td><td>PaCO₂ 過低（過度換氣）會使腦血管收縮、降低腦血流。</td></tr>
+    <tr><td>代謝需求</td><td>發燒、抽搐、麻醉深度不足會增加耗氧。</td></tr>
+    <tr><td>技術因素</td><td>貼片位置／密貼、環境光、訊號品質（見下方故障排除）。</td></tr>
+  </table>
+  <div class="caution"><b>提醒：</b>絕對數值不如「相對基準的變化與趨勢」重要；處置後應確認 StO₂ 回升並持續追蹤。實際閾值與流程依院內規範。</div>
+  <p style="font-size:12px;color:var(--muted)">參考：ForeSight 提供免基準的絕對 StO₂ 讀值並可自訂治療閾值；臨床常以「較基準下降 >20%」作為介入參考（見「參考資料與出處」章）。</p>
+
   <h3>訊號故障排除（Troubleshooting）</h3>
   <table>
     <tr><th>問題</th><th>可能原因</th><th>處理</th></tr>
@@ -597,7 +655,7 @@ body.fs-xl main{zoom:1.34}
 
 <!-- ⑪ Swan-Ganz 模組 -->
 <section class="sec" id="s-swanganz">
-  <h2>⑭ Swan-Ganz 模組安裝設定 <span class="pgtag">Setup Guide 第 13–14 頁・final 第 4 頁</span></h2>
+  <h2>⑮ Swan-Ganz 模組安裝設定 <span class="pgtag">Setup Guide 第 13–14 頁・final 第 4 頁</span></h2>
   <p class="lede">Swan-Ganz 模組（Swan-Ganz Module）<span class="badge sg">CCO・SvO₂・Fast CCO</span>用於侵入性連續心輸出量（CCO）監測。</p>
   <h3>模組安裝與開始監測</h3>
   <div class="progresswrap"><div class="pbar"><div></div></div><span class="ptext"></span></div>
@@ -623,7 +681,7 @@ body.fs-xl main{zoom:1.34}
 
 <!-- ⑫ 血氧定標 -->
 <section class="sec" id="s-oximetry">
-  <h2>⑮ 血氧飽和度（SvO₂／ScvO₂）定標 <span class="pgtag">Setup Guide 第 15–16 頁・簡報</span></h2>
+  <h2>⑯ 血氧飽和度（SvO₂／ScvO₂）定標 <span class="pgtag">Setup Guide 第 15–16 頁・簡報</span></h2>
   <p class="lede">血氧飽和度定標（Oximetry Calibration）分為「體外定標」（導管置入前）與「體內定標」（導管置入後）。</p>
 
   <h3>體外定標（In Vitro Calibration）— 導管置入前</h3>
@@ -656,7 +714,7 @@ body.fs-xl main{zoom:1.34}
 
 <!-- ⑬ Swan-Ganz 導管臨床參考 -->
 <section class="sec" id="s-catheter">
-  <h2>⑯ Swan-Ganz 肺動脈導管臨床參考 <span class="pgtag">臨床海報</span></h2>
+  <h2>⑰ Swan-Ganz 肺動脈導管臨床參考 <span class="pgtag">臨床海報</span></h2>
   <p class="lede">進階技術 Swan-Ganz 肺動脈導管（Pulmonary Artery Catheter）的構造、置入深度、波形、適應症與相關血行動力生理學。</p>
 
   <h3>導管各埠與構造</h3>
@@ -716,7 +774,7 @@ body.fs-xl main{zoom:1.34}
 
 <!-- ⑭ 介入分析 -->
 <section class="sec" id="s-intervention">
-  <h2>⑰ 介入分析（Intervention Analysis） <span class="pgtag">設備介紹簡報</span></h2>
+  <h2>⑱ 介入分析（Intervention Analysis） <span class="pgtag">設備介紹簡報</span></h2>
   <p class="lede">介入分析用於記錄臨床介入（如輸液、給藥、被動抬腿）前後的血行動力變化，協助評估治療反應。</p>
   <ul>
     <li>在導覽列選擇<b>介入分析圖示</b>，於介入措施執行時<b>標記事件</b>。</li>
@@ -727,7 +785,7 @@ body.fs-xl main{zoom:1.34}
 
 <!-- ⑮ SVP -->
 <section class="sec" id="s-svp">
-  <h2>⑱ 每搏輸出量流程・輸液反應測試 <span class="pgtag">設備介紹簡報</span></h2>
+  <h2>⑲ 每搏輸出量流程・輸液反應測試 <span class="pgtag">設備介紹簡報</span></h2>
   <p class="lede">每搏輸出量流程（Stroke Volume Protocol）用於評估病人的<b>輸液反應性（fluid responsiveness）</b>，判斷給予輸液後心臟功能是否改善。</p>
 
   <h3>輸液反應測試操作步驟</h3>
@@ -750,7 +808,7 @@ body.fs-xl main{zoom:1.34}
 
 <!-- ⑯ Vigileo -->
 <section class="sec" id="s-vigileo">
-  <h2>⑲ Vigileo 機器操作 <span class="pgtag">設備介紹簡報</span></h2>
+  <h2>⑳ Vigileo 機器操作 <span class="pgtag">設備介紹簡報</span></h2>
   <p class="lede">Vigileo 為 HemoSphere 前一代的 FloTrac 監視器，操作原理相近，供仍在使用該機型者參考。</p>
 
   <h3>背板接線（防呆設計）</h3>
@@ -772,7 +830,7 @@ body.fs-xl main{zoom:1.34}
 
 <!-- 產品組合與健保給付 -->
 <section class="sec" id="s-portfolio">
-  <h2>⑳ 產品組合與健保給付 <span class="pgtag">臺大麻醉部教育簡報</span></h2>
+  <h2>㉑ 產品組合與健保給付 <span class="pgtag">臺大麻醉部教育簡報</span></h2>
   <p class="lede">HemoSphere 平台可搭配的感測技術與給付別一覽。</p>
   <table>
     <tr><th>技術</th><th>侵入程度</th><th>用途</th><th>給付</th></tr>
@@ -785,9 +843,60 @@ body.fs-xl main{zoom:1.34}
   <div class="note"><b>FloTrac 4.0 演算法：</b>納入更多臨床情境（腸胃道、腎移植、腎切除等），在後負荷快速變化（如給予升壓劑 bolus）後，CO/SV 能更貼近生理變化；免手動再校正、每 20 秒更新一次。</div>
 </section>
 
+<!-- 參數速查表 -->
+<section class="sec" id="s-params-ref">
+  <h2>㉒ 參數速查表：公式與正常值 <span class="pgtag">Edwards 官方參數卡</span></h2>
+  <p class="lede">常用血行動力與氧合參數的公式與成人正常參考範圍。數值採 Edwards Clinical Education 官方《Normal Hemodynamic Parameters and Laboratory Values》(PP--US-2312 v2.0)。</p>
+
+  <h4>血行動力參數</h4>
+  <table>
+    <tr><th>參數</th><th>公式</th><th>正常值</th></tr>
+    <tr><td>MAP 平均動脈壓</td><td>[SBP + 2×DBP] / 3</td><td>70–105 mmHg</td></tr>
+    <tr><td>CVP／RAP 中心靜脈壓／右心房壓</td><td>—</td><td>2–6 mmHg</td></tr>
+    <tr><td>CO 心輸出量</td><td>HR × SV / 1000</td><td>4–8 L/min</td></tr>
+    <tr><td>CI 心臟指數</td><td>CO / BSA</td><td>2.5–4.0 L/min/m²</td></tr>
+    <tr><td>SV 每搏輸出量</td><td>CO / HR × 1000</td><td>60–100 mL/beat</td></tr>
+    <tr><td>SVI 每搏指數</td><td>CI / HR × 1000</td><td>33–47 mL/m²/beat</td></tr>
+    <tr><td>SVV 每搏量變異度</td><td>100 × (SVmax − SVmin) / SVmean</td><td>&lt; 10–15%</td></tr>
+    <tr><td>SVR 全身血管阻力</td><td>80 × (MAP − RAP) / CO</td><td>800–1200 dynes·s·cm⁻⁵</td></tr>
+    <tr><td>SVRI 全身血管阻力指數</td><td>80 × (MAP − RAP) / CI</td><td>1970–2390 dynes·s·cm⁻⁵·m²</td></tr>
+    <tr><td>PVR 肺血管阻力</td><td>80 × (MPAP − PAOP) / CO</td><td>100–250 dynes·s·cm⁻⁵</td></tr>
+    <tr><td>MPAP 平均肺動脈壓</td><td>[PASP + 2×PADP] / 3</td><td>10–20 mmHg</td></tr>
+    <tr><td>PAP 肺動脈壓</td><td>—</td><td>收縮 15–25／舒張 8–15 mmHg</td></tr>
+    <tr><td>PAWP／PAOP 肺動脈楔壓</td><td>—</td><td>6–12 mmHg</td></tr>
+    <tr><td>RVP 右心室壓</td><td>—</td><td>收縮 15–25／舒張 0–8 mmHg</td></tr>
+    <tr><td>RVEDV 右心室舒張末期容積</td><td>SV / EF</td><td>100–160 mL</td></tr>
+    <tr><td>RVEDVI 右心室舒張末期容積指數</td><td>RVEDV / 1.7</td><td>59–94 mL/m²</td></tr>
+    <tr><td>RVEF 右心室射出分率</td><td>SV / EDV</td><td>40–60%</td></tr>
+    <tr><td>CPP 冠狀動脈灌流壓</td><td>舒張 BP − PAOP</td><td>60–80 mmHg</td></tr>
+  </table>
+
+  <h4>氧合參數</h4>
+  <table>
+    <tr><th>參數</th><th>公式</th><th>正常值</th></tr>
+    <tr><td>CaO₂ 動脈血氧含量</td><td>(0.0138×Hb×SaO₂) + (0.0031×PaO₂)</td><td>17–20 mL/dL</td></tr>
+    <tr><td>DO₂ 氧輸送量</td><td>CaO₂ × CO × 10</td><td>950–1150 mL/min</td></tr>
+    <tr><td>DO₂I 氧輸送指數</td><td>CaO₂ × CI × 10</td><td>500–600 mL/min/m²</td></tr>
+    <tr><td>VO₂ 氧消耗量</td><td>C(a−v)O₂ × CO × 10</td><td>200–250 mL/min</td></tr>
+    <tr><td>O₂ER 氧攝取率</td><td>[(CaO₂ − CvO₂) / CaO₂] × 100</td><td>22–30%</td></tr>
+    <tr><td>SaO₂ 動脈血氧飽和度</td><td>—</td><td>95–100%</td></tr>
+    <tr><td>SvO₂ 混合靜脈血氧飽和度</td><td>—</td><td>60–80%</td></tr>
+    <tr><td>StO₂ 腦／組織血氧飽和度</td><td>HbO₂ / 總Hb</td><td>60–80%</td></tr>
+  </table>
+
+  <h4>常用檢驗值</h4>
+  <table>
+    <tr><th>項目</th><th>正常值</th></tr>
+    <tr><td>血紅素 Hb</td><td>男 13.5–17.5 g/dL；女 12.0–15.5 g/dL</td></tr>
+    <tr><td>血比容 Hct</td><td>男 41–50%；女 35–45%</td></tr>
+    <tr><td>乳酸 Lactate</td><td>0.93–1.65 mmol/L</td></tr>
+  </table>
+  <div class="note"><b>出處：</b>Edwards Clinical Education《Normal Hemodynamic Parameters and Laboratory Values》PP--US-2312 v2.0（詳見「參考資料與出處」章）。不同文獻與院內標準略有差異；SVV/PPV 於自主呼吸、心律不整、低潮氣量時參考性下降，請以 IFU 與院內規範為準。</div>
+</section>
+
 <!-- ⑰ 名詞表 -->
 <section class="sec" id="s-glossary">
-  <h2>㉑ 縮寫與名詞對照表 <span class="pgtag">補充整理</span></h2>
+  <h2>㉓ 縮寫與名詞對照表 <span class="pgtag">補充整理</span></h2>
   <p class="lede">本指南常見縮寫與中英名詞對照（供快速查閱）。</p>
   <table>
     <tr><th>縮寫／原文</th><th>中文</th><th>說明／正常範圍</th></tr>
@@ -820,16 +929,40 @@ body.fs-xl main{zoom:1.34}
 
 <!-- ⑱ 聲明 -->
 <section class="sec" id="s-legal">
-  <h2>㉒ 注意事項與版權聲明 <span class="pgtag">各文件版權頁</span></h2>
+  <h2>㉔ 注意事項與版權聲明 <span class="pgtag">各文件版權頁</span></h2>
   <div class="caution"><b>警語（CAUTION）：</b>美國聯邦法律規定本裝置僅限由醫師銷售或依醫師指示銷售。完整處方資訊（包括適應症、禁忌症、警告、注意事項與不良事件）請參閱使用說明書（Instructions for Use）。</div>
   <p style="font-size:13px;color:var(--muted)">Edwards、Edwards Lifesciences、風格化 E 標誌、Acumen、Acumen IQ、CCOmbo、CCOmbo V、FloTrac、ForeSight、HemoSphere、Swan、Swan-Ganz、Time-in-Target 與 VIP 均為 Edwards Lifesciences Corporation 或其關係企業之商標。其他商標為各所有權人之財產。</p>
   <p style="font-size:13px;color:var(--muted)">資料來源版權：© 2019 / 2022 / 2023 Edwards Lifesciences Corporation. 版權所有。文件編號 PP--US-2208 v2.0、PP--US-7085 v1.0、PP--US-3089 v3.0。<br>Edwards Lifesciences • One Edwards Way, Irvine CA 92614 USA • edwards.com｜24/7 技術支援 800-822-9837</p>
   <div class="note"><b>本網頁說明：</b>本互動式指南由原廠英文版 Setup Guide、臨床海報與中文設備介紹簡報翻譯整理而成，僅供教育訓練與快速參考；實際臨床操作請以原廠使用說明書（IFU）與院內規範為準。</div>
 </section>
 
+<!-- 參考資料與出處 -->
+<section class="sec" id="s-refs">
+  <h2>㉕ 參考資料與出處 <span class="pgtag">Sources</span></h2>
+  <p class="lede">本指南除原廠 Setup Guide、臨床海報與院內教育簡報外，數值與臨床說明另參考下列公開專業來源。</p>
+
+  <h3>原廠文件（本指南底本）</h3>
+  <ul>
+    <li>Edwards《HemoSphere Advanced Monitoring Platform Setup Guide》PP--US-7085 v1.0。</li>
+    <li>Edwards《HemoSphere Setup Guide（final）》PP--US-2208 v2.0。</li>
+    <li>Edwards《Advanced Hemodynamic Monitoring：Swan-Ganz Pulmonary Artery Catheter》海報 PP--US-3089 v3.0。</li>
+    <li>臺大醫院麻醉部《愛德華全方位進階血液動力學監測平台》教育簡報（HemoSphere with FloTrac、HPI and ForeSight，70 頁）。</li>
+  </ul>
+
+  <h3>官方參數與臨床實證</h3>
+  <ul>
+    <li>Edwards Clinical Education《Normal Hemodynamic Parameters and Laboratory Values》PP--US-2312 v2.0（心血管與氧合參數正常值、HPI/Eadyn/dP·dt 定義）。<br><a href="https://www.edwards.com/healthcare-professionals/pages/normal-hemodynamic-parameters-and-lab-values-card" target="_blank" rel="noopener">edwards.com — Normal Hemodynamic Parameters and Lab Values Card</a></li>
+    <li>Hatib F, Singh M, et al. <i>Machine-learning Algorithm to Predict Hypotension Based on High-fidelity Arterial Pressure Waveform Analysis.</i> Anesthesiology 2018;129:663–674（HPI 演算法開發與驗證）。<br><a href="https://pubs.asahq.org/anesthesiology/article/129/4/663/19099" target="_blank" rel="noopener">pubs.asahq.org — Anesthesiology 2018</a></li>
+    <li>Edwards《Acumen Hypotension Prediction Index software》產品頁與 FAQ（HPI 運作、警報 &gt;85、更新頻率）。<br><a href="https://www.edwards.com/gb/healthcare-professionals/products-services/predictive-monitoring/hpi" target="_blank" rel="noopener">edwards.com — Acumen HPI software</a></li>
+    <li>Edwards《ForeSight tissue oximetry sensor》產品頁（絕對 StO₂、治療閾值、貼片）。<br><a href="https://www.edwards.com/healthcare-professionals/products-services/tissue-oximetry/foresight" target="_blank" rel="noopener">edwards.com — ForeSight tissue oximetry</a></li>
+    <li>Steppan J, Hogue CW. <i>Cerebral and Tissue Oximetry.</i> Best Pract Res Clin Anaesthesiol 2014（NIRS 原理與腦氧監測）。<br><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4258229/" target="_blank" rel="noopener">PMC4258229 — Cerebral and Tissue Oximetry</a></li>
+  </ul>
+  <div class="caution"><b>免責：</b>以上為公開衛教與文獻資料整理，僅供教育參考；正常值與臨床閾值會因文獻、族群與量測方法而異。實際診療請以原廠使用說明書（IFU）與院內規範為準。</div>
+</section>
+
 <!-- 備忘錄 -->
 <section class="sec" id="s-memo">
-  <h2>㉓ 備忘錄與現場筆記 <span class="pgtag">院內實務</span></h2>
+  <h2>㉖ 備忘錄與現場筆記 <span class="pgtag">院內實務</span></h2>
   <p class="lede">院內實務備忘與個人筆記。本章與各章底部的筆記皆自動儲存於本機瀏覽器。</p>
 
   <h3>HR 訊號擷取：TEE → HemoSphere</h3>
@@ -878,6 +1011,10 @@ body.fs-xl main{zoom:1.34}
     <div class="card"><b>類比輸入 1／2（→1、→2）</b><br>外部壓力／類比訊號用，非 HR 音源線。</div>
     <div class="card"><b>壓力輸出（Pressure output）</b><br>將壓力訊號輸出至床邊監視器。</div>
   </div>
+
+  <h3>筆記工具</h3>
+  <p>可將所有章節的筆記彙整匯出為文字檔（.txt），方便交班或備份；列印時（右上「列印」）會輸出目前顯示的章節。</p>
+  <button id="exportNotes" class="btnsolid" type="button">匯出全部筆記（.txt）</button>
 </section>
 
 <div id="chapnav"></div>
@@ -900,7 +1037,7 @@ body.fs-xl main{zoom:1.34}
       b.closest('li').classList.toggle('done', b.checked);
       saved[b.dataset.idx]=b.checked;
       try{ localStorage.setItem(KEY,JSON.stringify(saved)); }catch(e){}
-      updateBars();
+      updateBars(); updateOverall();
     });
   });
   function updateBars(){
@@ -915,13 +1052,21 @@ body.fs-xl main{zoom:1.34}
       pw.querySelector('.ptext').textContent=done+' / '+bs.length+'（'+pct+'%）';
     });
   }
-  updateBars();
+  function updateOverall(){
+    var ob=document.getElementById('overallBar'), ot=document.getElementById('overallText');
+    if(!ob) return;
+    var done=0; boxes.forEach(function(b){ if(b.checked) done++; });
+    var pct=boxes.length? Math.round(done/boxes.length*100):0;
+    ob.style.width=pct+'%';
+    if(ot) ot.textContent=done+' / '+boxes.length+'（'+pct+'%）';
+  }
+  updateBars(); updateOverall();
   document.getElementById('resetBtn').addEventListener('click',function(){
     if(!confirm('確定要清除所有步驟勾選進度嗎？')) return;
     boxes.forEach(function(b){ b.checked=false; b.closest('li').classList.remove('done'); });
     saved={};
     try{ localStorage.removeItem(KEY); }catch(e){}
-    updateBars();
+    updateBars(); updateOverall();
   });
   var enBtn=document.getElementById('enToggle');
   function setEN(on){
@@ -957,13 +1102,13 @@ body.fs-xl main{zoom:1.34}
   var groups=[
     {name:'入門・平台硬體', ids:['s-overview','s-hardware','s-ports','s-screen']},
     {name:'通用臨床操作', ids:['s-clinical','s-pause-zero']},
-    {name:'微創監測感測器', ids:['s-flotrac','s-acumen','s-flotrac-op']},
+    {name:'微創監測感測器', ids:['s-flotrac','s-acumen','s-flotrac-op','s-waveform']},
     {name:'進階血行動力參數', ids:['s-acumen-params','s-clinical-bg']},
     {name:'組織血氧', ids:['s-foresight','s-foresight-adv']},
     {name:'侵入式監測 Swan-Ganz', ids:['s-swanganz','s-oximetry','s-catheter']},
     {name:'進階功能・實務', ids:['s-intervention','s-svp','s-vigileo']},
     {name:'產品與給付', ids:['s-portfolio']},
-    {name:'附錄', ids:['s-glossary','s-legal']},
+    {name:'附錄', ids:['s-params-ref','s-glossary','s-legal','s-refs']},
     {name:'個人筆記', ids:['s-memo']}
   ];
   var order=[]; groups.forEach(function(g){ g.ids.forEach(function(id){ order.push(id); }); });
@@ -1119,6 +1264,24 @@ body.fs-xl main{zoom:1.34}
       if(!ta.value || confirm('確定清除本章筆記？')){ ta.value=''; try{ localStorage.removeItem(key); }catch(e){} st.textContent='已清除'; setTimeout(function(){ st.textContent=''; },1400); }
     });
     s.appendChild(wrap);
+  });
+
+  /* export notes */
+  var eb=document.getElementById('exportNotes');
+  if(eb) eb.addEventListener('click',function(){
+    var lines=['Edwards 血行動力監測操作指南 — 我的筆記','匯出時間：'+new Date().toLocaleString(),''];
+    order.forEach(function(id){
+      var v=''; try{ v=localStorage.getItem('edwards_note_'+id)||''; }catch(e){}
+      if(v.trim()){ lines.push('【'+secTitle(id)+'】'); lines.push(v.trim()); lines.push(''); }
+    });
+    if(lines.length<=3){ alert('目前沒有任何筆記可匯出。'); return; }
+    var blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});
+    var d=new Date(), p=function(n){return(''+n).padStart(2,'0');};
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='HemoSphere_筆記_'+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'.txt';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(a.href); },2000);
   });
 
   /* back-to-top */
